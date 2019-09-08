@@ -15,9 +15,9 @@
 	"scripts": {
 		"lint": "eslint ./; true",
 		"lint-fix": "eslint --fix ./; true",
-		"start": "NODE_ENV=development webpack-dev-server",
-		"dev": "NODE_ENV=development webpack",
-		"build": "NODE_ENV=production webpack",
+		"start": "cross-env NODE_ENV=development webpack-dev-server",
+		"dev": "cross-env NODE_ENV=development webpack",
+		"build": "cross-env NODE_ENV=production webpack",
 		"serve": "firebase serve -p 9000",
 		"github-labels": "node -r dotenv/config ./node_modules/github-label-sync/bin/github-label-sync.js -l ./devops/labels.json datavized/twotone",
 		"test": "echo \"Error: no test specified\" && exit 1"
@@ -43,6 +43,7 @@
 		"case-sensitive-paths-webpack-plugin": "^2.2.0",
 		"clean-webpack-plugin": "^3.0.0",
 		"copy-webpack-plugin": "^5.0.4",
+		"cross-env": "^5.2.1",
 		"css-loader": "^3.2.0",
 		"datavized-code-style": "github:datavized/code-style",
 		"dotenv": "^8.1.0",
