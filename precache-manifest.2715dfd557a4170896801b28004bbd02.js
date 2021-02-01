@@ -264,6 +264,9 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "assets/yandex-browser-manifest.json"
   },
   {
+    "url": "index-156feea21b502bf5e986.js"
+  },
+  {
     "url": "index-20266ed083f2f4c68731.js"
   },
   {
@@ -276,9 +279,6 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "index-310f0c6722cf7b607d03.js"
   },
   {
-    "url": "index-39b9019953ec791528d9.js"
-  },
-  {
     "url": "index-47270d326041474945e8.js"
   },
   {
@@ -288,13 +288,13 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "index-6b3670a821bfda26f480.js"
   },
   {
-    "url": "index-79e543d16c5299f36c93.js"
-  },
-  {
     "url": "index-89ab60f07c0e65427f90.js"
   },
   {
     "url": "index-944c3ab3f1dd28fb43e7.js"
+  },
+  {
+    "url": "index-ac81a6ee55377c4b4c4a.js"
   },
   {
     "url": "index-cf1ab95e4397cad8c818.js"
@@ -306,7 +306,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "index-f77f4669a26ae08470e2.js"
   },
   {
-    "revision": "7d088e7add067db70379331ea77b3653",
+    "revision": "45eb9697522f9d896c7fe41c20f42784",
     "url": "index.html"
   },
   {
