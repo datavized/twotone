@@ -1,67 +1,22 @@
-import jsmediatags from 'jsmediatags';
-import ogg from 'audio-metadata/src/ogg';
+import * as musicMetadata from 'music-metadata-browser';
 import { imageMimeTypeRegex, fileExt } from '../regex';
-import readFileAsArrayBuffer from '../readFileAsArrayBuffer';
 
-const oggMimeTypeRegex = /^(audio|application)\/ogg$/i;
-const audioMimeTypeRegex = /^(audio|application)\/([a-z0-9-]+)$/i;
 const keepTags = ['title', 'artist', 'album', 'genre', 'track', 'year'];
 
-function mdOgg(file) {
-	return readFileAsArrayBuffer(file).then(fileBuffer => ogg(fileBuffer));
-}
-
-function jsm(file) {
-	return new Promise((resolve, reject) => {
-		new jsmediatags.Reader(file)
-			// .setTagsToRead(tags)
-			.read({
-				onSuccess(tag) {
-					resolve(tag.tags);
-				},
-				onError: reject
-			});
-	});
-}
-
-const metadataReaders = [
-	{
-		test: file => oggMimeTypeRegex.test(file.type),
-		fn: mdOgg
-	},
-	{
-		test: file => audioMimeTypeRegex.test(file.type),
-		fn: jsm
-	}
-];
-
 async function getAudioMetadata(file) {
-	let tags = {};
-	for (let i = 0; i < metadataReaders.length; i++) {
-		const reader = metadataReaders[i];
-		if (reader.test(file)) {
-			try {
-				const md = await reader.fn(file);
-				if (md) {
-					tags = md;
-					break;
-				}
-			} catch (e) {
-				console.warn('Error reading metadata', file.name, e);
-			}
-		}
-	}
+	const _metadata = await musicMetadata.parseBlob(file);
 
-	const { picture } = tags;
+	const { picture } = _metadata.common.picture && _metadata.common.picture.length > 0 ? _metadata.common.picture[0] : null;
 	const metadata = {};
 
-	Object.keys(tags).forEach(key => {
+	Object.keys(metadata.common).forEach(key => {
 		if (keepTags.indexOf(key) >= 0) {
-			metadata[key] = tags[key];
-		} else if (typeof tags[key] === 'string') {
-			metadata[key] = tags[key].trim();
+			metadata[key] = metadata.common[key];
+		} else if (typeof metadata.common[key] === 'string') {
+			metadata[key] = metadata.common[key].trim();
 		}
 	});
+	metadata.title = metadata.common.track;
 
 	if (!metadata.title) {
 		metadata.title = file.name.replace(fileExt, '');
@@ -83,12 +38,9 @@ async function getAudioMetadata(file) {
 	- let medium plugin handle this
 	  - audio: get from metadata tags and resize
 	*/
-	if (picture && picture.data && imageMimeTypeRegex.test(picture.format)) {
-		const format = picture.format.replace(imageMimeTypeRegex, 'image/$2').toLowerCase();
-		// const base64 = window.btoa(picture.data.map(c => String.fromCharCode(c)).join(''));
-		// const pictureURI = `data:${format};base64,` + base64;
+	if (picture && picture.data) {
 		const pictureData = new Uint8Array(picture.data);
-		mediaInfo.attachments.picture = new Blob([pictureData], { type: format }); // todo: array
+		mediaInfo.attachments.picture = new Blob([pictureData], { type: picture.format }); // todo: array
 	}
 
 	return mediaInfo;
